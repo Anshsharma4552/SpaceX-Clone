@@ -1,59 +1,58 @@
+// Get elements from the DOM
 const btn = document.getElementById('menu-btn');
 const overlay = document.getElementById('overlay');
 const menu = document.getElementById('mobile-menu');
 const counters = document.querySelectorAll('.counter');
 let scrollStarted = false;
 
+// Event listeners
 btn.addEventListener('click', navToggle);
 document.addEventListener('scroll', scrollPage);
 
+// Function to toggle navigation menu
 function navToggle() {
-  btn.classList.toggle('open');
-  overlay.classList.toggle('overlay-show');
-  document.body.classList.toggle('stop-scrolling');
-  menu.classList.toggle('show-menu');
+  btn.classList.toggle('open'); // Toggle button open class
+  overlay.classList.toggle('overlay-show'); // Show/hide overlay
+  document.body.classList.toggle('stop-scrolling'); // Prevent scrolling when menu is open
+  menu.classList.toggle('show-menu'); // Show/hide mobile menu
 }
 
+// Function to track scroll position and trigger counter animation
 function scrollPage() {
   const scrollPos = window.scrollY;
 
   if (scrollPos > 100 && !scrollStarted) {
-    countUp();
+    countUp(); // Start counter animation
     scrollStarted = true;
   } else if (scrollPos < 100 && scrollStarted) {
-    reset();
+    reset(); // Reset counter when scrolling back up
     scrollStarted = false;
   }
 }
 
+// Function to animate number counting up
 function countUp() {
   counters.forEach((counter) => {
-    counter.innerText = '0';
+    counter.innerText = '0'; // Initialize counter text to 0
 
     const updateCounter = () => {
-      // Get count target
-      const target = +counter.getAttribute('data-target');
-      // Get current counter value
-      const c = +counter.innerText;
+      const target = +counter.getAttribute('data-target'); // Get target number
+      const c = +counter.innerText; // Get current counter value
+      const increment = target / 100; // Define increment step
 
-      // Create an increment
-      const increment = target / 100;
-
-      // If counter is less than target, add increment
       if (c < target) {
-        // Round up and set counter value
-        counter.innerText = `${Math.ceil(c + increment)}`;
-
-        setTimeout(updateCounter, 75);
+        counter.innerText = `${Math.ceil(c + increment)}`; // Increase counter value
+        setTimeout(updateCounter, 75); // Call function recursively
       } else {
-        counter.innerText = target;
+        counter.innerText = target; // Set final value when target is reached
       }
     };
 
-    updateCounter();
+    updateCounter(); // Start the counter animation
   });
 }
 
+// Function to reset counter values to 0
 function reset() {
   counters.forEach((counter) => (counter.innerHTML = '0'));
 }
